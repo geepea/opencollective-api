@@ -5,6 +5,7 @@ import { getCollectiveAvatarUrl } from '../../../lib/collectivelib';
 import { GraphQLImageFormat, GraphQLMemberRole } from '../enum';
 
 import { GraphQLAmount } from './Amount';
+import { GraphQLAccount } from '../interface/Account';
 
 export const GraphQLContributor = new GraphQLObjectType({
   name: 'Contributor',
@@ -81,7 +82,7 @@ export const GraphQLContributor = new GraphQLObjectType({
       },
     },
     account: {
-      type: GraphQLString,
+      type: GraphQLAccount,
       resolve(contributor, _, req): Promise<string | null> {
         return req.loaders.Collective.byId.load(contributor.id);
       },
