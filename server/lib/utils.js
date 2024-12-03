@@ -6,7 +6,7 @@ import { URL } from 'url';
 import config from 'config';
 import fastRedact from 'fast-redact';
 import pdf from 'html-pdf';
-import { filter, get, isEqual, isObject, omit, padStart, sumBy } from 'lodash';
+import { filter, get, isObject, omit, padStart, sumBy } from 'lodash';
 import moment from 'moment';
 import pFilter from 'p-filter';
 
@@ -484,9 +484,7 @@ export const filterUntil = (list, filterFunc, conditionFunc) => {
  * @returns boolean: True if `obj` has ony the keys passed in `keys`
  */
 export const objHasOnlyKeys = (obj, keys) => {
-  const sortedObjKeys = Object.keys(obj).sort();
-  const sortedKeys = [...keys].sort();
-  return isEqual(sortedObjKeys, sortedKeys);
+  return Object.keys(obj).every(k => keys.includes(k));
 };
 
 /**
@@ -611,16 +609,3 @@ export const omitDeep = (obj, keys) =>
     (acc, next) => ({ ...acc, [next]: isObject(obj[next]) ? omitDeep(obj[next], keys) : obj[next] }),
     {},
   );
-
-/**
- *
- * @param {Promise} promise
- * @param {number} timeout
- * @returns
- */
-export const runPromiseOrTimeout = async (promise, timeout, errorMessage = 'Promise timed out') => {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error(errorMessage)), timeout)),
-  ]);
-};

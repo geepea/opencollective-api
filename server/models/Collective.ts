@@ -59,7 +59,7 @@ import FEATURE from '../constants/feature';
 import OrderStatuses from '../constants/order-status';
 import { PAYMENT_METHOD_SERVICE, PAYMENT_METHOD_TYPE } from '../constants/paymentMethods';
 import plans, { HostPlan } from '../constants/plans';
-import POLICIES, { Policies } from '../constants/policies';
+import POLICIES, { DEFAULT_POLICIES, Policies } from '../constants/policies';
 import roles, { MemberRoleLabels } from '../constants/roles';
 import { hasOptedOutOfFeature, isFeatureAllowedForCollectiveType } from '../lib/allowed-features';
 import {
@@ -176,7 +176,7 @@ type Settings = {
 
 type Data = Partial<{
   policies: Policies;
-  features: Record<FEATURE, boolean>;
+  features: Partial<Record<FEATURE, boolean>>;
   address: StructuredAddress;
   replyToEmail: string;
   isTrustedHost: boolean;
@@ -275,79 +275,80 @@ class Collective extends Model<
   >,
   InferCreationAttributes<Collective>
 > {
-  public declare id: number;
-  public declare type: CollectiveType;
-  public declare slug: string;
-  public declare name: string;
-  public declare legalName: string;
-  public declare company: string;
+  declare public id: number;
+  declare public type: CollectiveType;
+  declare public slug: string;
+  declare public name: string;
+  declare public legalName: string;
+  declare public company: string;
 
-  public declare CreatedByUserId: number;
-  public declare LastEditedByUserId: number;
-  public declare ParentCollectiveId: number;
-  public declare HostCollectiveId: number;
+  declare public CreatedByUserId: number;
+  declare public LastEditedByUserId: number;
+  declare public ParentCollectiveId: number;
+  declare public HostCollectiveId: number;
 
-  public declare hostFeePercent: number;
-  public declare platformFeePercent: number;
-  public declare description: string;
-  public declare longDescription: string;
-  public declare expensePolicy: string;
-  public declare contributionPolicy: string;
-  public declare currency: SupportedCurrency;
-  public declare image: string;
-  public declare backgroundImage: string;
-  public declare countryISO: string;
-  public declare settings: Settings;
-  public declare data: Data;
-  public declare startsAt: Date;
-  public declare endsAt: Date;
-  public declare timezone: string;
-  public declare isActive: boolean;
-  public declare isIncognito: boolean;
-  public declare approvedAt: Date;
-  public declare twitterHandle: string;
-  public declare githubHandle: string;
-  public declare repositoryUrl: string;
-  public declare website: string;
-  public declare publicUrl: string;
-  public declare tags: Array<string>;
-  public declare monthlySpending: number;
-  public declare deactivatedAt: Date;
-  public declare isHostAccount: boolean;
-  public declare plan: string;
+  declare public hostFeePercent: number;
+  declare public platformFeePercent: number;
+  declare public description: string;
+  declare public longDescription: string;
+  /** @deprecated Use policies @see {@link Policies.EXPENSE_POLICIES}*/
+  declare public expensePolicy: string;
+  declare public contributionPolicy: string;
+  declare public currency: SupportedCurrency;
+  declare public image: string;
+  declare public backgroundImage: string;
+  declare public countryISO: string;
+  declare public settings: Settings;
+  declare public data: Data;
+  declare public startsAt: Date;
+  declare public endsAt: Date;
+  declare public timezone: string;
+  declare public isActive: boolean;
+  declare public isIncognito: boolean;
+  declare public approvedAt: Date;
+  declare public twitterHandle: string;
+  declare public githubHandle: string;
+  declare public repositoryUrl: string;
+  declare public website: string;
+  declare public publicUrl: string;
+  declare public tags: Array<string>;
+  declare public monthlySpending: number;
+  declare public deactivatedAt: Date;
+  declare public isHostAccount: boolean;
+  declare public plan: string;
 
-  public declare createdAt: CreationOptional<Date>;
-  public declare updatedAt: CreationOptional<Date>;
-  public declare deletedAt?: CreationOptional<Date>;
+  declare public createdAt: CreationOptional<Date>;
+  declare public updatedAt: CreationOptional<Date>;
+  declare public deletedAt?: CreationOptional<Date>;
 
-  public declare host?: NonAttribute<Collective>;
+  declare public host?: NonAttribute<Collective>;
 
-  public declare tiers?: NonAttribute<Array<Tier>>;
-  public declare getTiers: HasManyGetAssociationsMixin<Tier>;
+  declare public tiers?: NonAttribute<Array<Tier>>;
+  declare public getTiers: HasManyGetAssociationsMixin<Tier>;
 
-  public declare members?: NonAttribute<Array<MemberModelInterface>>;
-  public declare getMembers: HasManyGetAssociationsMixin<MemberModelInterface>;
-  public declare adminMembers?: NonAttribute<Array<MemberModelInterface>>;
-  public declare getAdminMembers: HasManyGetAssociationsMixin<MemberModelInterface>;
+  declare public members?: NonAttribute<Array<MemberModelInterface>>;
+  declare public getMembers: HasManyGetAssociationsMixin<MemberModelInterface>;
+  declare public adminMembers?: NonAttribute<Array<MemberModelInterface>>;
+  declare public getAdminMembers: HasManyGetAssociationsMixin<MemberModelInterface>;
 
-  public declare legalDocuments?: NonAttribute<LegalDocument[]>;
-  public declare RequiredLegalDocuments?: NonAttribute<RequiredLegalDocument[]>;
-  public declare getLegalDocuments: HasManyGetAssociationsMixin<LegalDocument>;
-  public declare getRequiredLegalDocuments: HasManyGetAssociationsMixin<RequiredLegalDocument>;
-  public declare createRequiredLegalDocument: HasManyCreateAssociationMixin<RequiredLegalDocument>;
-  public declare countRequiredLegalDocuments: HasManyCountAssociationsMixin;
+  declare public legalDocuments?: NonAttribute<LegalDocument[]>;
+  declare public RequiredLegalDocuments?: NonAttribute<RequiredLegalDocument[]>;
+  declare public getLegalDocuments: HasManyGetAssociationsMixin<LegalDocument>;
+  declare public getRequiredLegalDocuments: HasManyGetAssociationsMixin<RequiredLegalDocument>;
+  declare public createRequiredLegalDocument: HasManyCreateAssociationMixin<RequiredLegalDocument>;
+  declare public countRequiredLegalDocuments: HasManyCountAssociationsMixin;
 
-  public declare accountingCategories?: NonAttribute<Array<AccountingCategory>>;
-  public declare getAccountingCategories: HasManyGetAssociationsMixin<AccountingCategory>;
+  declare public accountingCategories?: NonAttribute<Array<AccountingCategory>>;
+  declare public getAccountingCategories: HasManyGetAssociationsMixin<AccountingCategory>;
 
-  public declare getConnectedAccounts: HasManyGetAssociationsMixin<ConnectedAccount>;
-  public declare getPayoutMethods: HasManyGetAssociationsMixin<PayoutMethod>;
+  declare public getConnectedAccounts: HasManyGetAssociationsMixin<ConnectedAccount>;
+  declare public getPayoutMethods: HasManyGetAssociationsMixin<PayoutMethod>;
 
-  public declare getLocation: HasOneGetAssociationMixin<Location>;
-  public declare location?: LocationType;
+  declare public getLocation: HasOneGetAssociationMixin<Location>;
+  declare public location?: LocationType;
 
-  public declare parent?: NonAttribute<Collective>;
-  public declare children?: NonAttribute<Collective[]>;
+  declare public parent?: NonAttribute<Collective>;
+  declare public children?: NonAttribute<Collective[]>;
 
   static async createOrganization(collectiveData, adminUser, creator) {
     const CreatedByUserId = creator?.id || adminUser.id;
@@ -3496,7 +3497,7 @@ class Collective extends Model<
     return metrics;
   };
 
-  setPolicies = async function (policies) {
+  setPolicies = async function (policies: Policies) {
     for (const policy of Object.keys(policies)) {
       if (!POLICIES[policy]) {
         throw new Error(`Policy ${policy} is not supported`);
@@ -3712,15 +3713,41 @@ Collective.init(
     },
 
     expensePolicy: {
-      type: DataTypes.TEXT, // HTML
+      type: DataTypes.VIRTUAL, // HTML
       validate: {
         len: [0, 50000], // just to prevent people from putting a lot of text in there
       },
+      get() {
+        const currentPolicy =
+          this.data?.policies?.[POLICIES.EXPENSE_POLICIES] || DEFAULT_POLICIES[POLICIES.EXPENSE_POLICIES];
+
+        return currentPolicy?.invoicePolicy;
+      },
       set(expensePolicy: string) {
+        const currentPolicy =
+          this.data?.policies?.[POLICIES.EXPENSE_POLICIES] || DEFAULT_POLICIES[POLICIES.EXPENSE_POLICIES];
         if (expensePolicy) {
-          this.setDataValue('expensePolicy', sanitizeHTML(expensePolicy, optsSanitizeHtmlForSimplified));
+          const data = this.getDataValue('data');
+          const newPolicies = {
+            ...(data?.policies || {}),
+            [POLICIES.EXPENSE_POLICIES]: {
+              ...currentPolicy,
+              invoicePolicy: sanitizeHTML(expensePolicy, optsSanitizeHtmlForSimplified),
+              receiptPolicy: sanitizeHTML(expensePolicy, optsSanitizeHtmlForSimplified),
+            },
+          };
+          this.setDataValue('data', { data: { ...data, policies: newPolicies } });
         } else {
-          this.setDataValue('expensePolicy', null);
+          const data = this.getDataValue('data');
+          const newPolicies = {
+            ...(data?.policies || {}),
+            [POLICIES.EXPENSE_POLICIES]: {
+              ...currentPolicy,
+              invoicePolicy: '',
+              receiptPolicy: '',
+            },
+          };
+          this.setDataValue('data', { data: { ...data, policies: newPolicies } });
         }
       },
     },
